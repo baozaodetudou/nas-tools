@@ -1,10 +1,10 @@
-FROM jxxghp/nas-tools-base-image
+FROM baozaodetudou/nas-tools-base-image
 ENV LANG="C.UTF-8" \
     TZ="Asia/Shanghai" \
     NASTOOL_CONFIG="/config/config.yaml" \
     NASTOOL_AUTO_UPDATE=true \
     PS1="\u@\h:\w \$ " \
-    REPO_URL="https://github.com/jxxghp/nas-tools.git" \
+    REPO_URL="https://github.com/baozaodetudou/nas-tools.git" \
     PUID=0 \
     PGID=0 \
     UMASK=000 \
@@ -17,6 +17,5 @@ RUN python_ver=$(python3 -V | awk '{print $2}') \
     && git config --global pull.ff only \
     && git clone -b master ${REPO_URL} --depth=1 ${WORKDIR} \
     && git config --global --add safe.directory ${WORKDIR} \
-    && mkdir -p /var/log/supervisor
 VOLUME ["/config"]
 ENTRYPOINT ["/nas-tools/docker/entrypoint.sh"]

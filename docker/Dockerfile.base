@@ -13,8 +13,11 @@ RUN apk add --no-cache \
        curl \
        bash \
        fuse \
+       nodejs \
+       npm \
     && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo "${TZ}" > /etc/timezone \
+    && npm install pm2 -g \
     && ln -sf /usr/bin/python3 /usr/bin/python \
     && curl https://rclone.org/install.sh | bash \
     && pip install --upgrade pip setuptools wheel \
