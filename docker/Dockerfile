@@ -4,7 +4,7 @@ ENV LANG="C.UTF-8" \
     NASTOOL_CONFIG="/config/config.yaml" \
     NASTOOL_AUTO_UPDATE=true \
     PS1="\u@\h:\w \$ " \
-    REPO_URL="https://github.com/baozaodetudou/nas-tools.git" \
+    REPO_URL="https://github.com/jxxghp/nas-tools.git" \
     PUID=0 \
     PGID=0 \
     UMASK=000 \
@@ -15,7 +15,8 @@ RUN python_ver=$(python3 -V | awk '{print $2}') \
     && echo 'fs.inotify.max_user_watches=524288' >> /etc/sysctl.conf \
     && echo 'fs.inotify.max_user_instances=524288' >> /etc/sysctl.conf \
     && git config --global pull.ff only \
-    && git clone -b pm2 ${REPO_URL} --depth=1 ${WORKDIR} \
+    && git clone -b master ${REPO_URL} --depth=1 ${WORKDIR} \
     && git config --global --add safe.directory ${WORKDIR} \
+    && mkdir -p /var/log/supervisor
 VOLUME ["/config"]
 ENTRYPOINT ["/nas-tools/docker/entrypoint.sh"]
