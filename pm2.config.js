@@ -8,8 +8,6 @@ module.exports = {
     {
       "name": "nastools",
       "script": "bash",
-      "uid": UID,
-      "gid": GID,
       "args": [
           "-c",
           "python3 run.py"
