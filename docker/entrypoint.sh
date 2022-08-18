@@ -34,4 +34,4 @@ echo "以PUID=${PUID}，PGID=${PGID}的身份启动程序..."
 echo "注意：日志将停止打印，请通过文件或WEB页面查看日志"
 #chown -R ${PUID}:${PGID} /config ${WORKDIR} /var/log/supervisor/
 umask ${UMASK}
-exec su-exec ${PUID}:${PGID} pm2 ${WORKDIR}/pm2.config.js
+#exec su-exec ${PUID}:${PGID} pm2 ${WORKDIR}/pm2.config.js
