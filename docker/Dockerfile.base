@@ -1,0 +1,25 @@
+FROM alpine
+RUN apk add --no-cache \
+       git \
+       gcc \
+       musl-dev \
+       python3-dev \
+       py3-pip \
+       libxml2-dev \
+       libxslt-dev \
+       tzdata \
+       su-exec \
+       zip \
+       curl \
+       bash \
+       fuse \
+       nodejs \
+       npm \
+    && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
+    && echo "${TZ}" > /etc/timezone \
+    && npm install pm2 -g \
+    && ln -sf /usr/bin/python3 /usr/bin/python \
+    && curl https://rclone.org/install.sh | bash \
+    && pip install --upgrade pip setuptools wheel \
+    && pip install -r https://raw.githubusercontent.com/jxxghp/nas-tools/master/requirements.txt \
+    && rm -rf /tmp/* /root/.cache /var/cache/apk/*

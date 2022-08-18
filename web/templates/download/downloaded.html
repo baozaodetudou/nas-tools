@@ -1,0 +1,111 @@
+<div class="container-xl">
+  <div class="page-header d-print-none">
+    <div class="row align-items-center">
+      <div class="col">
+        <h2 class="page-title">近期下载</h2>
+      </div>
+    </div>
+  </div>
+</div>
+{% if Count > 0 %}
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row row-cards" id="downloaded_content">
+      {% for item in Items %}
+      <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="card card-sm card-link-pop rounded-3">
+          <span class="badge badge-pill {% if item[3] == '电影' %}bg-green{% else %}bg-blue{% endif %}" style="position:absolute;top:10px;left:10px;">{{item[3]}}</span>
+          {% if item[5] > '0' %}
+          <div class="badge badge-pill bg-purple" style="position:absolute;top:10px;right:10px;">{{ item[5] }}</div>
+          {% endif %}
+          <a href='javascript:show_mediainfo_modal("{% if item[3] == "电影" %}MOV{% else %}TV{% endif %}", "{{ item[1] }}", "{{ item[2] }}", "{{ item[4] }}")' class="d-block">
+            <img src="{{ item[6] or '../static/img/no-image.png' }}" onerror="this.src='../static/img/no-image.png'" class="card-img-top" style="border-top-left-radius:8px !important; border-top-right-radius:8px !important">
+          </a>
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div>
+                <div><strong title="站点：{{ item[12] }}<br>种子：{{ item[8] }}<br>时间：{{ item[11] }}" data-bs-toggle="tooltip" data-bs-html="true">{{ item[1] }}</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="page-body">
+  <div class="container-xl d-flex flex-column justify-content-center">
+    <div class="empty">
+      <div class="empty-img"><img src="./static/img/posting_photo.svg" height="128"  alt="">
+      </div>
+      <p class="empty-title" id="search_tip_title">没有记录</p>
+      <p class="empty-subtitle text-muted" id="search_tip_text">
+        近期没有下载任何影视资源
+      </p>
+    </div>
+  </div>
+</div>
+{% endif %}
+<script type="text/javascript">
+  //状态标记
+  var loading = false;
+  var CurrentPage = 1;
+  function loading_data() {
+    if(loading){
+      return;
+    }
+    loading = true;
+    CurrentPage ++;
+    show_wait_process();
+    ajax_post("get_downloaded", {"page": CurrentPage}, function(ret){
+      if(ret.Items.length > 0){
+        loading = false;
+      }
+      hide_wait_process();
+      // 插入HTML
+      for(var i=0; i<ret.Items.length; i++){
+        item = ret.Items[i];
+        var html = '';
+        html += '<div class="col-6 col-sm-4 col-md-3 col-xl-2"><div class="card card-sm card-link-pop rounded-3">';
+        if(item[3] == '电影'){
+          html += '<span class="badge badge-pill bg-green" style="position:absolute;top:10px;left:10px;">'+item[3]+'</span>';
+        }else{
+          html += '<span class="badge badge-pill bg-blue" style="position:absolute;top:10px;left:10px;">'+item[3]+'</span>';
+        }
+        if(item[5]){
+          html += '<div class="badge badge-pill bg-purple" style="position:absolute;top:10px;right:10px;">'+item[5]+'</div>'
+        }
+        if(item[3] == "电影"){
+          html += '<a href=\'javascript:show_mediainfo_modal("MOV", "'+item[1]+'", "'+item[2]+'", "'+item[4]+'")\' class="d-block">';
+        }else{
+          html += '<a href=\'javascript:show_mediainfo_modal("TV", "'+item[1]+'", "'+item[2]+'", "'+item[4]+'")\' class="d-block">';
+        }
+        if(item[6]){
+          html += '<img src="'+item[6]+'" onerror="this.src=\'../static/img/no-image.png\'" class="card-img-top" style="border-top-left-radius:8px !important; border-top-right-radius:8px !important; object-fit:contain;">';
+        }else{
+          html += '<img src="../static/img/no-image.png" class="card-img-top" style="border-top-left-radius:8px !important; border-top-right-radius:8px !important; object-fit:contain;">';
+        }
+        html += '</a>';
+        html += '<div class="card-body"><div class="d-flex align-items-center">';
+        html += '<div><strong title="站点：'+item[12]+'<br>种子：'+item[8]+'<br>时间：'+item[11]+'" data-bs-toggle="tooltip" data-bs-html="true">'+item[1]+'</strong></div>';
+        html += '<div class="ms-auto">';
+        html += '</div>';
+        html += '</div></div>';
+        html += '</div></div>';
+        $("#downloaded_content").append(html);
+      }
+    });
+  }
+
+  $(document).ready(function () {
+    $(window).scroll(function () {
+      var $body = $("body");
+      /*判断窗体高度与竖向滚动位移大小相加 是否 超过内容页高度*/
+      if (($(window).height() + $(window).scrollTop()) >= $body.height() - 20) {
+        loading_data();
+      }
+    });
+  });
+</script>
