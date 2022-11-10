@@ -1,12 +1,6 @@
 import os
 import sys
 from config import Config
-from web.main import App as nastool
-from app.brushtask import BrushTask
-from app.helper import IndexerHelper
-from app.rsschecker import RssChecker
-from app.scheduler import run_scheduler
-from app.sync import run_monitor
 
 
 # 添加第三方库入口,按首字母顺序，引入brushtask时涉及第三方库，需提前引入
@@ -38,6 +32,12 @@ if __ssl_cert:
     app_arg['ssl_context'] = (__ssl_cert, __ssl_key)
 
 
+from web.main import App as nastool
+from app.brushtask import BrushTask
+from app.helper import IndexerHelper
+from app.rsschecker import RssChecker
+from app.scheduler import run_scheduler
+from app.sync import run_monitor
 # 启动定时服务
 run_scheduler()
 
