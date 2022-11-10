@@ -1,3 +1,5 @@
+import os
+import sys
 from config import Config
 from web.main import App as nastool
 from app.brushtask import BrushTask
@@ -6,6 +8,15 @@ from app.rsschecker import RssChecker
 from app.scheduler import run_scheduler
 from app.sync import run_monitor
 
+
+# 添加第三方库入口,按首字母顺序，引入brushtask时涉及第三方库，需提前引入
+with open(os.path.join(os.path.dirname(__file__),
+                       "third_party.txt"), "r") as f:
+    third_party = f.readlines()
+    for third_party_lib in third_party:
+        sys.path.append(os.path.join(os.path.dirname(__file__),
+                                     "third_party",
+                                     third_party_lib.strip()).replace("\\", "/"))
 
 config = Config()
 __web_host = "::"
