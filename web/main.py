@@ -12,7 +12,7 @@ from math import floor
 from pathlib import Path
 from urllib import parse
 
-from flask import request, json, render_template, make_response, session, send_from_directory, send_file
+from flask import Flask, request, json, render_template, make_response, session, send_from_directory, send_file
 from flask_login import LoginManager, login_user, login_required, current_user
 
 import log
@@ -33,7 +33,6 @@ from app.utils import DomUtils, SystemUtils, WebUtils
 from app.utils.types import *
 from config import WECHAT_MENU, PT_TRANSFER_INTERVAL, TORRENT_SEARCH_PARAMS, NETTEST_TARGETS, \
     Config
-from web import App
 from web.action import WebAction
 from web.apiv1 import apiv1_bp
 from web.backend.WXBizMsgCrypt3 import WXBizMsgCrypt
@@ -41,6 +40,10 @@ from web.backend.user import User
 from web.backend.wallpaper import get_login_wallpaper
 from web.security import require_auth
 
+App = Flask(__name__)
+App.config['JSON_AS_ASCII'] = False
+App.secret_key = os.urandom(24)
+App.permanent_session_lifetime = datetime.timedelta(days=30)
 
 applog = logging.getLogger('werkzeug')
 applog.setLevel(logging.ERROR)
