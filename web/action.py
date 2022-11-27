@@ -231,18 +231,14 @@ class WebAction:
         # 签退
         logout_user()
         # 退出
+        log.info(f'{os.getpid()}')
         if SystemUtils.is_synology():
             os.system("ps -ef|grep -w 'run:App'|grep -v grep|awk '{print $2}'|xargs kill -9")
-        # elif SystemUtils.is_docker():
-        #     os.system("ps -ef|grep -w 'Xvfb'|grep -v grep|awk '{print $1}'|xargs kill -9")
-        #     os.system("ps -ef|grep -w 'run:App'|grep -v grep|awk '{print $1}'|xargs kill -9")
+        elif SystemUtils.is_docker():
+            os.system("ps -ef|grep -w 'Xvfb'|grep -v grep|awk '{print $1}'|xargs kill -9")
+            os.system(f"kill -9 {os.getpid()}")
         else:
-            try:
-                log.info(f'{os.getpid()}')
-                os.kill(os.getpid(), getattr(signal, "SIGKILL", signal.SIGTERM))
-            except Exception as e:
-                log.info(e)
-                os.system(f"kill -9 {os.getpid()}")
+            os.kill(os.getpid(), getattr(signal, "SIGKILL", signal.SIGTERM))
 
     @staticmethod
     def handle_message_job(msg, client, in_from=SearchType.OT, user_id=None, user_name=None):
