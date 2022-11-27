@@ -52,7 +52,6 @@ LoginManager.init_app(App)
 # API注册
 App.register_blueprint(apiv1_bp, url_prefix="/api/v1")
 
-
 @App.after_request
 def add_header(r):
     """

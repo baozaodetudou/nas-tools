@@ -224,20 +224,23 @@ class WebAction:
         """
         停止进程
         """
-        # 停止定时服务
-        stop_scheduler()
-        # 停止监控
-        stop_monitor()
-        # 签退
-        logout_user()
-        # 退出
-        if SystemUtils.is_synology():
-            os.system("ps -ef|grep -w 'run:App'|grep -v grep|awk '{print $2}'|xargs kill -9")
-        elif SystemUtils.is_docker():
-            os.system("ps -ef|grep -w 'Xvfb'|grep -v grep|awk '{print $1}'|xargs kill -9")
-            os.system("ps -ef|grep -w 'run:App'|grep -v grep|awk '{print $1}'|xargs kill -9")
-        else:
-            os.kill(os.getpid(), getattr(signal, "SIGKILL", signal.SIGTERM))
+        log.info(f'{os.getpid()}')
+        log.info(f'{os.getppid()}')
+        os.system(f"kill -9 {os.getpid()}")
+        # # 停止定时服务
+        # stop_scheduler()
+        # # 停止监控
+        # stop_monitor()
+        # # 签退
+        # logout_user()
+        # # 退出
+        # if SystemUtils.is_synology():
+        #     os.system("ps -ef|grep -w 'run:App'|grep -v grep|awk '{print $2}'|xargs kill -9")
+        # elif SystemUtils.is_docker():
+        #     os.system("ps -ef|grep -w 'Xvfb'|grep -v grep|awk '{print $1}'|xargs kill -9")
+        #     os.system("ps -ef|grep -w 'run:App'|grep -v grep|awk '{print $1}'|xargs kill -9")
+        # else:
+        #     os.kill(os.getpid(), getattr(signal, "SIGKILL", signal.SIGTERM))
 
     @staticmethod
     def handle_message_job(msg, client, in_from=SearchType.OT, user_id=None, user_name=None):

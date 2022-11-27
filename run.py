@@ -55,7 +55,7 @@ else:
 
 from config import CONFIG
 import log
-from web.main import App
+from web import App
 from app.brushtask import BrushTask
 from app.db import init_db, update_db
 from app.helper import IndexerHelper
@@ -138,11 +138,11 @@ def start_service():
     IndexerHelper()
 
 
-# 系统初始化
-init_system()
-
-# 启动服务
-start_service()
+# # 系统初始化
+# init_system()
+#
+# # 启动服务
+# start_service()
 
 
 # 本地运行
